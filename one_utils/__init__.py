@@ -1,3 +1,3 @@
 name = "one_utils"
-__all__ =['task_mapreduce']
-from one_utils.mp import task_mapreduce 
+__all__ =['mapreduce_mp']
+from one_utils.parallel import mapreduce_mp 
