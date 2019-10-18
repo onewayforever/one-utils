@@ -12,8 +12,8 @@ def do_map(map_q,reduce_q,pid,map_fn,map_wrapper,reduce_fn,perprocess_obj_init,p
                 res=map_wrapper(item,perprocess_obj=perprocess_obj)
             else:
                 res=map_fn(item)
-        except:
-            print('Exception in mapping item {}'.format(item))
+        except Exception as e:
+            print('Exception {} in mapping item {}'.format(e,item))
             res = None
         output.append(res)
 
@@ -39,9 +39,11 @@ def mapreduce_mp(iteration,map_fn=None,map_wrapper=None,reduce_fn=None,pargs={},
     tasks = []
     map_q = Manager().Queue()
     reduce_q = Manager().Queue()
+    print('start distribute data')
     for item in iteration:
         map_q.put(item)
     n = np if np is not None else cpu_count()
+    print('start process')
     for i in range(n):
         pro = Process(target=do_map, args=(map_q,reduce_q,i,map_fn,map_wrapper,reduce_fn,perprocess_obj_init,perprocess_reduce_fn,pargs))
         pro.start()
